@@ -1,0 +1,61 @@
+2025-11-02 11:02:28 Start execution of initiators.initiators
+2025-11-02 11:02:31 Error ('42P01', '[42P01] ERROR: relation "log_data" does not exist;\nError while executing the query (1) (SQLExecDirectW)') in initiators.initiators
+2025-11-02 11:02:31 Execution of initiators.initiators terminated
+2025-11-02 11:05:52 Start execution of initiators.initiators
+2025-11-02 11:05:52 Error ('42601', '[42601] ERROR: at or near ")": syntax error\nDETAIL: source SQL:\nCREATE TABLE IF NOT EXISTS Events (\n    id SERIAL PRIMARY KEY,\n    user_id VARCHAR(50) NOT NULL,\n    action VARCHAR(10) NOT NULL,\n    object_id VARCHAR(50) NOT NULL,\n    time TIMESTAMP NOT NULL,\n)\n^;\nError while executing the query (1) (SQLExecDirectW)') in initiators.initiators
+2025-11-02 11:05:52 Execution of initiators.initiators terminated
+2025-11-02 11:06:32 Start execution of initiators.initiators
+2025-11-02 11:06:33 Execution of initiators.initiators terminated
+2025-11-02 11:12:13 Start execution of initiators.initiators
+2025-11-02 11:12:15 Execution of initiators.initiators terminated
+2025-11-04 18:16:46 Start execution of initiators.initiators
+2025-11-04 18:16:49 Execution of initiators.initiators terminated
+2025-11-12 18:55:38 Start execution of initiators.initiators
+2025-11-12 18:55:39 Execution of initiators.initiators terminated
+2025-11-12 18:55:39 Start execution of eurostat.demographic
+2025-11-12 18:55:44 Execution of eurostat.demographic terminated
+2025-11-28 17:42:47 Start execution of initiators.initiators
+2025-11-28 17:42:54 Error ('42601', '[42601] ERROR: at or near ")": syntax error\nDETAIL: source SQL:\nCREATE TABLE IF NOT EXISTS Categories (\n    id SERIAL PRIMARY KEY,\n    category VARCHAR(50) NOT NULL,\n)\n^;\nError while executing the query (1) (SQLExecDirectW)') in initiators.initiators
+2025-11-28 17:42:54 Execution of initiators.initiators terminated
+2025-11-28 17:43:55 Start execution of initiators.initiators
+2025-11-28 17:44:01 Error ('42601', '[42601] ERROR: at or near ")": syntax error\nDETAIL: source SQL:\nCREATE TABLE IF NOT EXISTS Categories (\n    id SERIAL PRIMARY KEY,\n    category VARCHAR(50) NOT NULL,\n)\n^;\nError while executing the query (1) (SQLExecDirectW)') in initiators.initiators
+2025-11-28 17:44:01 Execution of initiators.initiators terminated
+2025-11-28 17:46:22 Start execution of initiators.initiators
+2025-11-28 17:46:45 Error <method 'execute' of 'pyodbc.Connection' objects> returned a result with an exception set in initiators.initiators
+2025-11-28 17:46:45 Execution of initiators.initiators terminated
+2025-11-28 17:48:17 Start execution of initiators.initiators
+2025-11-28 17:48:22 Error ('42P07', '[42P07] ERROR: index with name "idx_user_id" already exists;\nError while executing the query (1) (SQLExecDirectW)') in initiators.initiators
+2025-11-28 17:48:22 Execution of initiators.initiators terminated
+2025-11-28 17:50:45 Start execution of initiators.initiators
+2025-11-28 17:50:50 Error ('42P07', '[42P07] ERROR: index with name "idx_user_id" already exists;\nError while executing the query (1) (SQLExecDirectW)') in initiators.initiators
+2025-11-28 17:50:50 Execution of initiators.initiators terminated
+2025-11-28 17:51:58 Start execution of initiators.initiators
+2025-11-28 17:51:58 Error ('42P07', '[42P07] ERROR: index with name "idx_user_id" already exists;\nError while executing the query (1) (SQLExecDirectW)') in initiators.initiators
+2025-11-28 17:51:58 Execution of initiators.initiators terminated
+2025-11-28 17:57:25 Start execution of initiators.initiators
+2025-11-28 17:57:37 Error ('42P07', '[42P07] ERROR: index with name "idx_questions_object" already exists;\nError while executing the query (1) (SQLExecDirectW)') in initiators.initiators
+2025-11-28 17:57:37 Execution of initiators.initiators terminated
+2025-11-28 18:00:09 Start execution of initiators.initiators
+2025-11-28 18:00:10 Error ('42P07', '[42P07] ERROR: index with name "idx_user_id" already exists;\nError while executing the query (1) (SQLExecDirectW)') in initiators.initiators
+2025-11-28 18:00:10 Execution of initiators.initiators terminated
+2025-11-28 18:01:47 Start execution of initiators.initiators
+2025-11-28 18:01:48 Execution of initiators.initiators terminated
+2025-11-28 18:03:07 Start execution of initiators.initiators
+2025-11-28 18:03:08 Error ('42601', '[42601] ERROR: at or near "consecutive_correct": syntax error\nDETAIL: source SQL:\nCREATE TABLE IF NOT EXISTS UserQState (\n  user_id BIGINT NOT NULL,\n  question_id BIGINT NOT NULL,\n  next_due_at TIMESTAMP NOT NULL\n  consecutive_correct SMALLINT DEFAULT 0,\n  ^;\nError while executing the query (1) (SQLExecDirectW)') in initiators.initiators
+2025-11-28 18:03:08 Execution of initiators.initiators terminated
+2025-11-28 18:03:20 Start execution of initiators.initiators
+2025-11-28 18:03:21 Execution of initiators.initiators terminated
+2025-11-28 18:04:58 Start execution of initiators.initiators
+2025-11-28 18:05:01 Error ('42601', '[42601] ERROR: at or near "existsidx_uqs_user_next_due": syntax error\nDETAIL: source SQL:\nCREATE INDEX IF NOT EXISTSidx_uqs_user_next_due ON UserQuestionState (user_id, next_due_at)\n                    ^;\nError while executing the query (1) (SQLExecDirectW)') in initiators.initiators
+2025-11-28 18:05:01 Execution of initiators.initiators terminated
+2025-11-28 18:06:58 Start execution of initiators.initiators
+2025-11-28 18:06:59 Error ('42P01', '[42P01] ERROR: relation "userqstate" does not exist;\nError while executing the query (1) (SQLExecDirectW)') in initiators.initiators
+2025-11-28 18:06:59 Execution of initiators.initiators terminated
+2025-11-28 18:07:19 Start execution of initiators.initiators
+2025-11-28 18:07:19 Error ('42P01', '[42P01] ERROR: relation "userquestionstate" does not exist;\nError while executing the query (1) (SQLExecDirectW)') in initiators.initiators
+2025-11-28 18:07:19 Execution of initiators.initiators terminated
+2025-11-28 18:07:37 Start execution of initiators.initiators
+2025-11-28 18:07:42 Error ('0A000', '[0A000] ERROR: now(): context-dependent operators are not allowed in INDEX PREDICATE;\nError while executing the query (1) (SQLExecDirectW)') in initiators.initiators
+2025-11-28 18:07:42 Execution of initiators.initiators terminated
+2025-11-28 18:08:39 Start execution of initiators.initiators
+2025-11-28 18:08:40 Execution of initiators.initiators terminated
