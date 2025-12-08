@@ -85,7 +85,7 @@ earnings_df = earnings_df.rename(columns=lambda x: f"earn_{x}" if x not in {'geo
 
 # ------ JSON update -------- #
 db_name = 'e_earnings'
-pattern = ["name", "age", "sector", "statistic", "unit", "sex"]
+pattern = ["name", "age", "sector", "sex", "unit", "statistic"]
 descriptions = {
     'earn': 'Earnings hourly, yearly by sector, age group, sex'
 }

@@ -205,7 +205,7 @@ for i, db in enumerate(dbs_list):
 
     for col in measure_columns:
         df[col] = df[col].str.replace('_', '-')
-    df = clean_stat(df, keys=keys, columns_to_pivot=measure_columns, prefix=f'v{prefix}-', suffix=f'{suffix}_%')
+    df = clean_stat(df, keys=keys, columns_to_pivot=measure_columns, prefix=f'v{prefix}-', suffix=f'{suffix}_perc')
 
     viol_dfs[i+1] = df
 
@@ -394,7 +394,7 @@ for i, db in enumerate(dbs_spec_list):
     )
     for col in measure_columns:
         df[col] = df[col].str.replace('_', '-')
-    df = clean_stat(df, keys=keys, columns_to_pivot=measure_columns, prefix=f'v{prefix}', suffix=f'{suffix}_%')
+    df = clean_stat(df, keys=keys, columns_to_pivot=measure_columns, prefix=f'v{prefix}', suffix=f'{suffix}_perc')
 
     viol_spec_dfs[i+1] = df
 

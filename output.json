@@ -79,16 +79,6 @@
             "description": "Proportion of live births outside marriage"
         }
     },
-    "e_earnings": {
-        "earn": {
-            "age": "total,y-ge60,y-lt30,y30-39,y40-49,y50-59",
-            "sector": "industry,services,total",
-            "statistic": "f,m,t",
-            "unit": "mean",
-            "sex": "pps",
-            "description": "Earnings hourly, yearly by sector, age group, sex"
-        }
-    },
     "e_employment": {
         "emp": {
             "age": "y15-24,y15-64,y25-54,y55-64",
@@ -2114,6 +2104,47 @@
             "scenario": "ssp5-85-(baseline),ssp5-34-os",
             "model": "REMIND-MAGPIE",
             "description": "Emissions (Mt/yr) from CMIP6 model of Volatile Organic Compounds (often NMVOC: ozone precursors that participate in tropospheric photochemistry."
+        }
+    },
+    "e_earnings": {
+        "earn": {
+            "age": "y-ge60,y30-39,total,y-lt30,y40-49,y50-59",
+            "sector": "total,services,industry",
+            "sex": "t,m,f",
+            "unit": "mean",
+            "statistic": "pps",
+            "description": "Earnings hourly, yearly by sector, age group, sex"
+        }
+    },
+    "e_income": {
+        "grs-earn": {
+            "ecase": "cpl-ch2-aw100,cpl-ch2-aw100-100,cpl-ch2-aw100-33,cpl-nch-aw100-100,cpl-nch-aw100-33,p1-nch-aw100,p1-nch-aw167,p1-nch-aw50,p1-nch-aw67",
+            "unit": "eur,pps",
+            "description": "Gross annual earning"
+        },
+        "net-earn": {
+            "ecase": "cpl-ch2-aw100,cpl-ch2-aw100-100,cpl-ch2-aw100-33,cpl-nch-aw100-100,cpl-nch-aw100-33,p1-nch-aw100,p1-nch-aw167,p1-nch-aw50,p1-nch-aw67",
+            "unit": "eur,pps",
+            "description": "Net annual earning"
+        },
+        "soc": {
+            "ecase": "cpl-ch2-aw100,cpl-ch2-aw100-100,cpl-ch2-aw100-33,cpl-nch-aw100-100,cpl-nch-aw100-33,p1-nch-aw100,p1-nch-aw167,p1-nch-aw50,p1-nch-aw67",
+            "unit": "eur,pps",
+            "description": "Annual social security"
+        },
+        "tax": {
+            "ecase": "cpl-ch2-aw100,cpl-ch2-aw100-100,cpl-ch2-aw100-33,cpl-nch-aw100-100,cpl-nch-aw100-33,p1-nch-aw100,p1-nch-aw167,p1-nch-aw50,p1-nch-aw67",
+            "unit": "eur,pps",
+            "description": "Annual taxes"
+        },
+        "total-earn": {
+            "ecase": "cpl-ch2-aw100,cpl-ch2-aw100-100,cpl-ch2-aw100-33,cpl-nch-aw100-100,cpl-nch-aw100-33,p1-nch-aw100,p1-nch-aw167,p1-nch-aw50,p1-nch-aw67",
+            "unit": "eur,pps",
+            "description": "Total annual earning"
+        },
+        "taxrt": {
+            "ecase": "cpl-ch2-aw100,cpl-ch2-aw100-100,cpl-ch2-aw100-33,cpl-nch-aw100-100,cpl-nch-aw100-33,p1-nch-aw100,p1-nch-aw167,p1-nch-aw50,p1-nch-aw67",
+            "description": "Tax rate"
         }
     }
 }

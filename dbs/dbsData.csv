@@ -1,6 +1,5 @@
 id,db_name,available_geos,available_periods,db_source
 20,e_employment_spec,DE+ES+FR+IT,2018Q1+2020Q4,eurostat
-77,e_earnings,DE+ES+FR+IT,2002+2022,eurostat
 78,e_employment,DE+ES+FR+IT,2018Q1+2023Q4,eurostat
 79,e_government,DE+ES+FR+IT,2018+2023,eurostat
 80,e_macroeconomic,DE+ES+FR+IT,2018Q1+2023Q4,eurostat
@@ -23,3 +22,5 @@ id,db_name,available_geos,available_periods,db_source
 97,e_gender_violence_spec,AT+BE+BG+CY+CZ+DE+DK+EE+EL+ES+EU_V+FI+FR+HR+HU+IE+IT+LT+LU+LV+ME+MT+NL+PL+PT+RO+RS+SE+SI+SK+XK,2021+2021,eurostat
 98,o_infl_contrib,AUT+BEL+CAN+CHL+COL+DEU+DNK+ESP+EST+FIN+FRA+GBR+GRC+IRL+ISL+ISR+ITA+JPN+KOR+LTU+LVA+MEX+NLD+NOR+POL+PRT+SVN+SWE+TUR+USA,2010+2025,oecd
 99,e_demographic,DE+ES+FR+IT,2018+2023,eurostat
+100,e_earnings,DE+ES+FR+IT,2002+2022,eurostat
+101,e_income,DE+ES+FR+IT,2018+2023,eurostat

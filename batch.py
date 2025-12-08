@@ -1,10 +1,10 @@
 from toolbi import DatasourceTools
 
-DatasourceTools.execute_modules(['initiators.initiators'])
+#DatasourceTools.execute_modules(['initiators.initiators'])
 
 modules = [
-    'eurostat.demographic',
-    #'eurostat.earnings',
+    #'eurostat.demographic',
+    'eurostat.earnings',
     #'eurostat.employment',
     #'eurostat.government',
     #'eurostat.macroeconomic',
@@ -22,7 +22,7 @@ modules = [
     #'static.ssp',
 ]
 
-#DatasourceTools.execute_modules(modules)
+DatasourceTools.execute_modules(modules)
 
 baseline = [
     'dbs.dbs',

@@ -5,10 +5,11 @@ import datetime
 import re
 import pandas as pd
 import importlib
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from urllib.parse import urlparse, parse_qs, unquote
 from tooldb import update_db
 from sentence_transformers import SentenceTransformer
+from itertools import product
 
 
 class DatasourceTable:
@@ -279,37 +280,6 @@ def default_connection(df_to_insert, db_name:str, db_source:str=None, geo_col:st
     default_table.commit()
 
     dest.disconnect()
-
-
-def send_df(df:pd.DataFrame, dest_table:str, file_path, new_rows:dict=None, by_row:bool=True, 
-                vectorization:bool=True, string_in:str="title", vect_out:str="vector_dim", conn_dest:str="connDest.json"):
-    if vectorization:
-        model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
-    dest = SqlDatasource()
-    dest.load(conn_dest)
-    dest.connect()
-    destination_table = dest.gettable(dest_table)
-
-    if new_rows:
-        df = pd.concat([df, pd.DataFrame(new_rows)], ignore_index=True)
-        df.to_csv(file_path, index=False)
-
-    rows = new_rows if by_row else df.to_dict(orient="records")
-
-    for row in rows:
-        if vectorization:
-            embs = model.encode(row[string_in],
-                                convert_to_numpy=True,
-                                batch_size=64,
-                                normalize_embeddings=True)
-            vals = embs.tolist()
-            vec_str = "[" + ",".join(f"{float(x):.10f}" for x in vals) + "]"   # e.g. "[0.012345,-0.023456,...]"
-            row[vect_out] = vec_str
-
-        destination_table.insertone(row)
-
-    destination_table.commit()
-    dest.disconnect()
                       
 def _quote_ident(name: str) -> str:
     """
@@ -404,4 +374,238 @@ def create_table_sql(
         dest.disconnect()
     except Exception as exc:
         return sql_text, {"executed": False, "message": str(exc)}
+
+
+def generate_chart_rows(
+    data: Dict[str, Any],
+    db_name: str,
+    procedure: int = None,
+    delete_single_var_rows: bool = False,
+    start_id: int = 1,
+    chart_type: str = "",
+    category: str = "",
+    grouping: Optional[Dict[str, List[str]]] = None,
+) -> List[Dict[str, Any]]:
+    """
+    Generate rows using procedures from the provided `data` dict for the given `db_name`.
+
+    Parameters:
+    - data: json file with data to be parsed.
+    - db_name: name of the database (present in the first level of the json file) to be selected.
+    - procedure: one of the following procedures to create groupings of variables and attributes:
+        - 1: Graph for a unique Root bucket and a unique Selection.
+        - 2: Graph for a unique Variable and all selections of an attribute.
+    - delete_single_var_rows: it is possible that the procedures create singular lists, if this option is set to
+      true, then these rows are not appended.
+    - start_id: numeric id from which the rows start to be indexed, it increments only for rows included in the returned list
+    - chart_type: the type of chart (hist, line, radar, area, pie) to be used.
+    - category: the category of the chart.
+    - grouping (optional): dict mapping root name -> list of top-level keys (those present in data[db_name]).
+      If provided, this explicit grouping is used. Otherwise grouping is inferred from each top-level key
+      by splitting at the first '-' and using the left part as the root (original behaviour).
+
+    Structure json:
+      variable: {attribute1: {selection1, selection2}, attribute2: {selection1, selection2}}
+      variable = root + name
+    """
+    if db_name not in data:
+        raise KeyError(f"db_name '{db_name}' not found in data")
+
+    rows: List[Dict[str, Any]] = []
+    next_id = int(start_id)
+
+    # Helper: build objects dict for a given list of keys (only keep existing keys)
+    def build_objs_for_keys(keys: List[str]) -> Dict[str, Dict[str, List[str]]]:
+        objs: Dict[str, Dict[str, List[str]]] = {}
+        for key in keys:
+            if key not in data[db_name]:
+                raise KeyError(f"key '{key}' from grouping not found in data['{db_name}']")
+            value = data[db_name][key]
+            objs[key] = {}
+            for attr, val in value.items():
+                if attr == "description":
+                    continue
+                # ensure string -> split by comma; keep deterministic ordering
+                vals = [x.strip() for x in str(val).split(",") if x.strip()]
+                objs[key][attr] = vals
+        return objs
+
+    if procedure == 1:
+        # Build groups per root either from provided grouping or by splitting keys
+        groups: Dict[str, Dict[str, Dict[str, List[str]]]] = {}
+
+        if grouping is not None:
+            # Validate and build groups according to provided mapping
+            # Expect mapping: root -> list of top-level keys
+            for root, keys in grouping.items():
+                if not isinstance(keys, (list, tuple)):
+                    raise TypeError(f"grouping['{root}'] must be a list of keys")
+                groups[root] = build_objs_for_keys(list(keys))
+        else:
+            # Infer grouping by prefix before '-'
+            # groups[root][key] = { attr: [vals...] }
+            for key, value in data[db_name].items():
+                root = key.split('-', 1)[0]
+                groups.setdefault(root, {})
+                groups[root].setdefault(key, {})
+                for attr, val in value.items():
+                    if attr == "description":
+                        continue
+                    groups[root][key][attr] = [x.strip() for x in str(val).split(",") if x.strip()]
+
+        # Iterate per root
+        for root, objs in groups.items():
+            if not objs:
+                continue
+
+            # Collect attribute names from the first object (assume consistent attrs)
+            first_obj = next(iter(objs.values()))
+            attr_names = list(first_obj.keys())
+
+            # For each attribute, collect unique values across all objects in this root
+            attr_unique: Dict[str, List[str]] = {}
+            for attr in attr_names:
+                vals = set()
+                for obj in objs.values():
+                    vals.update(obj.get(attr, []))
+                # deterministic order
+                attr_unique[attr] = sorted(vals)
+
+            # Build Cartesian product of attributes
+            combos = list(product(*[attr_unique[attr] for attr in attr_names]))
+
+            for combo in combos:
+                combo_dict = dict(zip(attr_names, combo))
+                vars_list = []
+                for obj_name in objs:
+                    var_parts = [obj_name] + [combo_dict[attr] for attr in attr_names]
+                    vars_list.append("_".join(var_parts))
+                    
+                vars_string = "+".join(vars_list)
+                row = {
+                    "id": next_id,
+                    "title": "",
+                    "description": "",
+                    "db_name": db_name,
+                    "vars": vars_string,
+                    "chart_type": chart_type,
+                    "category": category,
+                    "vector_dim": "",
+                }
+                if not (delete_single_var_rows and len(vars_list) == 1):
+                    rows.append(row)
+                    next_id += 1
+
+    elif procedure == 2:
+        # Unchanged behavior for procedure 2 (per-variable primary attribute)
+        for key, value in data[db_name].items():
+            attributes: Dict[str, List[str]] = {}
+            for attribute, val in value.items():
+                if attribute == "description":
+                    continue
+                attr_list = [x.strip() for x in str(val).split(",") if x.strip()]
+                attributes[attribute] = attr_list
+
+            if not attributes:
+                continue
+
+            attr_names = list(attributes.keys())
+            primary_attr = attr_names[0]
+            primary_list = attributes[primary_attr]
+
+            other_attr_names = attr_names[1:]
+            other_lists = [attributes[n] for n in other_attr_names]
+
+            suffix_combinations = list(product(*other_lists)) if other_lists else [()]
+
+            for suffixes in suffix_combinations:
+                vars_list = []
+                suffix_str = "_".join(suffixes) if suffixes else ""
+
+                for primary_value in primary_list:
+                    if suffix_str:
+                        vars_list.append(f"{key}_{primary_value}_{suffix_str}")
+                    else:
+                        vars_list.append(f"{key}_{primary_value}")
+
+                vars_string = "+".join(vars_list)
+                row = {
+                    "id": next_id,
+                    "title": "",
+                    "description": "",
+                    "db_name": db_name,
+                    "vars": vars_string,
+                    "chart_type": chart_type,
+                    "category": category,
+                    "vector_dim": "",
+                }
+
+                if not (delete_single_var_rows and len(row["vars"]) == 1):
+                    rows.append(row)
+                    next_id += 1
+
+    else:
+        raise ValueError("Procedure not recognized")
+
+    return rows
+
+
+
+def update_chart_rows(
+        df:pd.DataFrame, 
+        updates:List[str], 
+        id_val:int, 
+        id_column:str="id", 
+        update_columns:List[str]=None, 
+        send:bool=True,
+        vectorization:bool=True,
+        dest_table:str="",
+        string_in:str="title", 
+        vect_out:str="vector_dim", 
+        conn_dest:str="connDest.json"
+        ):
+    """
+    Update the newly generated chart rows filling empty rows (default to title and description).
+    Then if vectorization is set to true, derive the semantic vector transformation.
+    If send is true send the complete new rows to the database in the dest_table.
+    """
+    mask = df[id_column] >= id_val
+    rows_to_update = df.loc[mask]
+
+    if len(rows_to_update) != len(updates):
+        raise ValueError(
+            f"Mismatch: {len(rows_to_update)} rows but {len(updates)} updates"
+        )
     
+    if update_columns==None:
+        update_columns = ["title", "description"]
+
+    for i, col in enumerate(update_columns):
+        df.loc[mask, col] = [u[i] for u in updates]
+
+    if send:
+        if vectorization:
+            model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+        dest = SqlDatasource()
+        dest.load(conn_dest)
+        dest.connect()
+        destination_table = dest.gettable(dest_table)
+
+        rows = df.loc[mask]
+
+        for row in rows:
+            if vectorization:
+                embs = model.encode(row[string_in],
+                                    convert_to_numpy=True,
+                                    batch_size=64,
+                                    normalize_embeddings=True)
+                vals = embs.tolist()
+                vec_str = "[" + ",".join(f"{float(x):.10f}" for x in vals) + "]"   # e.g. "[0.012345,-0.023456,...]"
+                row[vect_out] = vec_str
+
+            destination_table.insertone(row)
+
+        destination_table.commit()
+        dest.disconnect()
+    
+    return df

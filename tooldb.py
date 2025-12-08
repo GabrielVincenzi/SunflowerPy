@@ -3,7 +3,8 @@ import numpy as np
 import json
 import os
 import re
-from typing import Union, List, Optional, Dict
+from itertools import product
+from typing import Union, List, Optional, Dict, Any
 
 def clean_stat(
     df: pd.DataFrame,
@@ -290,3 +291,139 @@ def update_json(df: pd.DataFrame, db_name: str, pattern: List[str], descriptions
     data[db_name] = existing_db
     with open(filename, 'w') as f:
         json.dump(data, f, indent=4)
+
+
+def generate_chart_rows(
+    data: Dict[str, Any],
+    db_name: str,
+    procedure: str = None,
+    delete_single_var_rows: bool = False,
+    start_id: int = 1,
+    chart_type: str = None,
+    category: str = None,
+) -> List[Dict[str, Any]]:
+    """
+    Generate rows using procedures from the provided `data` dict for the given `db_name`.
+    - procedure 1: Graph for a unique Root bucket and a unique Selection
+    - procedure 2: Graph for a unique Variable and all selections of an attribute
+
+    Structure json:
+    variable: {attribute1: {selection1, selection2}, attribute2: {selection1, selection2}}
+    variable = root + name
+
+    Behavior:
+      - If delete_single_var_rows is True, rows whose 'vars' list has length 1 are excluded.
+      - IDs begin at `start_id` and increment only for rows included in the returned list.
+    """
+    if db_name not in data:
+        raise KeyError(f"db_name '{db_name}' not found in data")
+
+    rows: List[Dict[str, Any]] = []
+    next_id = int(start_id)
+
+    if procedure == 1:
+        groups = {}
+        # Build groups per root
+        for key, value in data[db_name].items():
+            root = key.split('-', 1)[0]
+            groups.setdefault(root, {})
+            groups[root][key] = {}
+            for attr, val in value.items():
+                if attr == "description":
+                    continue
+                groups[root][key][attr] = [x.strip() for x in val.split(",") if x.strip()]
+
+        # Iterate per root
+        for root, objs in groups.items():
+            # Collect lists of attribute values per attribute across all objects
+            # We assume all objects have the same set of attribute names
+            attr_names = list(next(iter(objs.values())).keys())
+
+            # Instead, we want **per-attribute Cartesian product** across attributes
+            # For that, build a dict: attr_name -> list of unique values across objects
+            attr_unique = {}
+            for attr in attr_names:
+                vals = set()
+                for obj in objs.values():
+                    vals.update(obj[attr])
+                attr_unique[attr] = sorted(vals)  # deterministic order
+
+            # Now build all combinations of attribute values
+            combos = list(product(*[attr_unique[attr] for attr in attr_names]))
+
+            # For each combination, build vars list: one var per object with that combination
+            for combo in combos:
+                combo_dict = dict(zip(attr_names, combo))
+                vars_list = []
+                for obj_name in objs:
+                    # build var name: obj_name + values for this combination (preserve attribute order)
+                    var_parts = [obj_name] + [combo_dict[attr] for attr in attr_names]
+                    vars_list.append("_".join(var_parts))
+
+                # Append row
+                row = {
+                    "id": next_id,
+                    "title": f"title_for_{root}",
+                    "description": "description",
+                    "db_name": db_name,
+                    "vars": vars_list,
+                    "chart_type": chart_type,
+                    "category": category,
+                    "vector_dim": "",
+                }
+                if not (delete_single_var_rows and len(vars_list) == 1):
+                    rows.append(row)
+                    next_id += 1
+
+    elif procedure == 2:
+        # For each top-level key in the db, build rows using a "primary attribute" and other attributes
+        for key, value in data[db_name].items():
+            attributes = {}
+            for attribute, val in value.items():
+                if attribute == "description":
+                    continue
+                attr_list = [x.strip() for x in str(val).split(",") if x.strip()]
+                attributes[attribute] = attr_list
+
+            if not attributes:
+                continue
+
+            attr_names = list(attributes.keys())
+            primary_attr = attr_names[0]
+            primary_list = attributes[primary_attr]
+
+            other_attr_names = attr_names[1:]
+            other_lists = [attributes[n] for n in other_attr_names]
+
+            suffix_combinations = list(product(*other_lists)) if other_lists else [()]
+
+            for suffixes in suffix_combinations:
+                vars_list = []
+                # build suffix string if suffixes not empty
+                suffix_str = "_".join(suffixes) if suffixes else ""
+
+                for primary_value in primary_list:
+                    if suffix_str:
+                        vars_list.append(f"{key}_{primary_value}_{suffix_str}")
+                    else:
+                        vars_list.append(f"{key}_{primary_value}")
+
+                row = {
+                    "id": next_id,
+                    "title": f"title_for_{key}_{primary_attr}",
+                    "description": value.get("description", ""),
+                    "db_name": db_name,
+                    "vars": vars_list,
+                    "chart_type": chart_type,
+                    "category": category,
+                    "vector_dim": "",
+                }
+
+                if not (delete_single_var_rows and len(row["vars"]) == 1):
+                    rows.append(row)
+                    next_id += 1
+
+    else:
+        raise ValueError("Procedure not recognized")
+
+    return rows

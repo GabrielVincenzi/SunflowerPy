@@ -54,5 +54,14 @@
     "ED5": "Short-cycle tertiary education",
     "ED6-8": "Tertiary education excluding short-cycle tertiary education (levels 6-8)",
     "ED1-3": "Primary and secondary education (levels 1-3)",
-    "ED1_2": "Primary and lower secondary education (levels 1 and 2)"
+    "ED1-2": "Primary and lower secondary education (levels 1 and 2)",
+    "P1_NCH_AW50": "Single person without children earning 50% of the average earning",
+    "P1_NCH_AW67": "Single person without children earning 67% of the average earning",
+    "P1_NCH_AW100": "Single person without children earning 100% of the average earning",
+    "P1_NCH_AW167": "Single person without children earning 167% of the average earning",
+    "CPL_CH2_AW100": "One-earner couple with two children earning 100% of the average earning",
+    "CPL_CH2_AW100_100": "Two-earner couple with two children, both earning 100% of the average earning",
+    "CPL_NCH_AW100_100": "Two-earner couple without children, both earning 100% of the average earning",
+    "CPL_NCH_AW100_33": "Two-earner couple without children, one earning 100% and the other 33% of the average earning",
+    "CPL_CH2_AW100_33": "Two-earner couple with two children, one earning 100% and the other 33% of the average earning"
 }
