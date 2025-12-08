@@ -1,0 +1,5 @@
+# Environment variables
+.env
+
+# Connection config
+connDest.json
