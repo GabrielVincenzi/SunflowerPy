@@ -1,5 +1,5 @@
 
-# Updates for the gender_violence database
+# Updates for the gender_violence database (procedure 1)
 updates_gender_violence = [
     ["Gender Violence against Women", "Women who have experienced physical and/or psychological violence, threats and sexual violence from a any perpetrator."],
     ["Domestic Gender Violence against Women", "Women who have experienced physical and/or psychological violence, threats and sexual violence from a domestic perpetrator."],

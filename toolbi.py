@@ -396,7 +396,8 @@ def generate_chart_rows(
     - db_name: name of the database (present in the first level of the json file) to be selected.
     - procedure: one of the following procedures to create groupings of variables and attributes:
         - 1: Graph for a unique Root bucket and a unique Selection.
-        - 2: Graph for a unique Variable and all selections of an attribute.
+        - 2: Graph for a unique Variable and each attribute with each other selection.
+        - 3: Graph for a unique Root bucket and all combinations of selections in all attributes (Cartesian product).
     - delete_single_var_rows: it is possible that the procedures create singular lists, if this option is set to
       true, then these rows are not appended.
     - start_id: numeric id from which the rows start to be indexed, it increments only for rows included in the returned list
@@ -405,6 +406,9 @@ def generate_chart_rows(
     - grouping (optional): dict mapping root name -> list of top-level keys (those present in data[db_name]).
       If provided, this explicit grouping is used. Otherwise grouping is inferred from each top-level key
       by splitting at the first '-' and using the left part as the root (original behaviour).
+    - forbidden_group: in procedure 2 these attributes are never going to be used as the fixed list for combinations, 
+      while in procedure 3 these attributes will create n different lists filled with Cartesian product of their selections with all other selections.
+    - forbidden_other: in procedure 2 these attributes are never going to be used as the changable list for combinations.
 
     Structure json:
       variable: {attribute1: {selection1, selection2}, attribute2: {selection1, selection2}}
@@ -431,6 +435,28 @@ def generate_chart_rows(
                 vals = [x.strip() for x in str(val).split(",") if x.strip()]
                 objs[key][attr] = vals
         return objs
+    
+    # Helper to build vars_list for a given mapping of attribute -> chosen value(s)
+    def build_vars_list_for_fixed_map(fixed_map: Dict[str, str]) -> List[str]:
+        """
+        fixed_map: mapping for some attributes (usually the primary attrs). For
+        the remaining attributes, iterate all combinations (lexicographic).
+        Return a single aggregated vars list (one element per variable name).
+        """
+        remaining_attrs = [a for a in attr_names if a not in fixed_map]
+        remaining_lists = [attr_unique[a] for a in remaining_attrs]
+
+        remaining_combos = list(product(*remaining_lists)) if remaining_lists else [()]
+
+        vars_list: List[str] = []
+        # For each remaining-combination (lexicographic), append variables for each object
+        for rem_combo in remaining_combos:
+            rem_map = dict(zip(remaining_attrs, rem_combo)) if remaining_attrs else {}
+            full_map = {**fixed_map, **rem_map}
+            for obj_name in objs:
+                parts = [obj_name] + [str(full_map[attr]) for attr in attr_names]
+                vars_list.append("_".join(parts))
+        return vars_list
 
     if procedure == 1:
         # Build groups per root either from provided grouping or by splitting keys
@@ -587,6 +613,88 @@ def generate_chart_rows(
                     if not (delete_single_var_rows and len(vars_list) == 1):
                         rows.append(row)
                     next_id += 1
+
+    elif procedure == 3:
+        # Build groups per root (same grouping logic as proc 1)
+        groups: Dict[str, Dict[str, Dict[str, List[str]]]] = {}
+
+        if grouping is not None:
+            for root, keys in grouping.items():
+                if not isinstance(keys, (list, tuple)):
+                    raise TypeError(f"grouping['{root}'] must be a list of keys")
+                groups[root] = build_objs_for_keys(list(keys))
+        else:
+            for key, value in data[db_name].items():
+                root = key.split('-', 1)[0]
+                groups.setdefault(root, {})
+                groups[root].setdefault(key, {})
+                for attr, val in value.items():
+                    if attr == "description":
+                        continue
+                    groups[root][key][attr] = [x.strip() for x in str(val).split(",") if x.strip()]
+
+        if not forbidden_group:
+            forbidden_group = {"unit"}
+
+        forbidden_primary_lc = {x.lower() for x in (forbidden_group or set())}
+
+        for root, objs in groups.items():
+            if not objs:
+                continue
+
+            # attribute order is taken from the first object (preserve keys order)
+            first_obj = next(iter(objs.values()))
+            attr_names = list(first_obj.keys())
+
+            # collect unique sorted values per attribute across objects in the root
+            attr_unique: Dict[str, List[str]] = {}
+            for attr in attr_names:
+                vals = set()
+                for obj in objs.values():
+                    vals.update(obj.get(attr, []))
+                attr_unique[attr] = sorted(vals)
+
+            # determine primary attributes (to split on)
+            primary_attrs = [a for a in attr_names if a.lower() in forbidden_primary_lc]
+
+            if not primary_attrs:
+                # No forbidden_primary present => single aggregated var-list for the entire cartesian product
+                # Build one fixed_map == {} so remaining are all attributes
+                vars_list = build_vars_list_for_fixed_map({})
+                if not (delete_single_var_rows and len(vars_list) == 1):
+                    rows.append({
+                        "id": next_id,
+                        "title": "",
+                        "description": "",
+                        "db_name": db_name,
+                        "vars": "+".join(vars_list),
+                        "chart_type": chart_type,
+                        "category": category,
+                        "vector_dim": "",
+                    })
+                    next_id += 1
+            else:
+                # Split output by the cartesian product of primary attribute values
+                primary_value_lists = [attr_unique[a] for a in primary_attrs]
+                # Skip root if any primary attribute has no values
+                if any(len(lst) == 0 for lst in primary_value_lists):
+                    continue
+
+                for prim_values in product(*primary_value_lists):
+                    fixed_primary_map = dict(zip(primary_attrs, prim_values))
+                    vars_list = build_vars_list_for_fixed_map(fixed_primary_map)
+                    if not (delete_single_var_rows and len(vars_list) == 1):
+                        rows.append({
+                            "id": next_id,
+                            "title": "",
+                            "description": "",
+                            "db_name": db_name,
+                            "vars": "+".join(vars_list),
+                            "chart_type": chart_type,
+                            "category": category,
+                            "vector_dim": "",
+                        })
+                        next_id += 1
 
     else:
         raise ValueError("Procedure not recognized")
