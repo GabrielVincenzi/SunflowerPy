@@ -380,6 +380,8 @@ def generate_chart_rows(
     data: Dict[str, Any],
     db_name: str,
     procedure: int = None,
+    forbidden_group: set = None,
+    forbidden_other: set = set(),
     delete_single_var_rows: bool = False,
     start_id: int = 1,
     chart_type: str = "",
@@ -497,7 +499,6 @@ def generate_chart_rows(
                     next_id += 1
 
     elif procedure == 2:
-        # Unchanged behavior for procedure 2 (per-variable primary attribute)
         for key, value in data[db_name].items():
             attributes: Dict[str, List[str]] = {}
             for attribute, val in value.items():
@@ -509,46 +510,88 @@ def generate_chart_rows(
             if not attributes:
                 continue
 
-            attr_names = list(attributes.keys())
-            primary_attr = attr_names[0]
-            primary_list = attributes[primary_attr]
+            attr_names = list(attributes.keys())  # preserve original order
+            n_attrs = len(attr_names)
 
-            other_attr_names = attr_names[1:]
-            other_lists = [attributes[n] for n in other_attr_names]
+            # configuration: never use these as the varying/group attribute
+            if not forbidden_group:
+                forbidden_group = {"unit"}
+            
+            preferred_placeholders = ["total", "tot", "t"]
 
-            suffix_combinations = list(product(*other_lists)) if other_lists else [()]
+            # Determine placeholder for each forbidden_other attribute based on existing values
+            forbidden_placeholder_map: Dict[str, str] = {}
+            for forb in forbidden_other:
+                # find the attribute in attr_names (case-insensitive)
+                matched_attr_name = next((an for an in attr_names if an.lower() == forb.lower()), None)
+                if matched_attr_name is None:
+                    continue  # attribute not present, skip
 
-            for suffixes in suffix_combinations:
-                vars_list = []
-                suffix_str = "_".join(suffixes) if suffixes else ""
+                values_lower = [str(v).lower() for v in attributes[matched_attr_name]]
+                # pick the first preferred placeholder present in the values
+                chosen = next((ph for ph in preferred_placeholders if ph.lower() in values_lower), None)
+                if chosen is None:
+                    # If none of the preferred placeholders present, skip this attribute
+                    continue
+                forbidden_placeholder_map[matched_attr_name.lower()] = chosen
 
-                for primary_value in primary_list:
-                    if suffix_str:
-                        vars_list.append(f"{key}_{primary_value}_{suffix_str}")
-                    else:
-                        vars_list.append(f"{key}_{primary_value}")
+            # Generate combinations
+            for g in range(n_attrs):
+                group_name = attr_names[g]
 
-                vars_string = "+".join(vars_list)
-                row = {
-                    "id": next_id,
-                    "title": "",
-                    "description": "",
-                    "db_name": db_name,
-                    "vars": vars_string,
-                    "chart_type": chart_type,
-                    "category": category,
-                    "vector_dim": "",
-                }
+                # Skip disallowed group attributes
+                if group_name.lower() in {x.lower() for x in forbidden_group}:
+                    continue
 
-                if not (delete_single_var_rows and len(row["vars"]) == 1):
-                    rows.append(row)
+                group_list = attributes[group_name]
+
+                # other indices: exclude group AND forbidden_other
+                other_indices = [
+                    i for i in range(n_attrs)
+                    if i != g and attr_names[i].lower() not in {x.lower() for x in forbidden_other}
+                ]
+                other_lists = [attributes[attr_names[i]] for i in other_indices]
+
+                other_combinations = list(product(*other_lists)) if other_lists else [()]
+
+                for combo in other_combinations:
+                    vars_list = []
+                    for group_item in group_list:
+                        parts = []
+                        combo_idx = 0
+                        for i in range(n_attrs):
+                            name_lower = attr_names[i].lower()
+                            if i == g:
+                                parts.append(str(group_item))
+                            elif name_lower in forbidden_placeholder_map:
+                                # use the determined placeholder (must exist in values)
+                                parts.append(forbidden_placeholder_map[name_lower])
+                            else:
+                                parts.append(str(combo[combo_idx]))
+                                combo_idx += 1
+
+                        suffix = "_".join(parts)
+                        vars_list.append(f"{key}_{suffix}")
+
+                    vars_string = "+".join(vars_list)
+                    row = {
+                        "id": next_id,
+                        "title": "",
+                        "description": "",
+                        "db_name": db_name,
+                        "vars": vars_string,
+                        "chart_type": chart_type,
+                        "category": category,
+                        "vector_dim": "",
+                    }
+                    if not (delete_single_var_rows and len(vars_list) == 1):
+                        rows.append(row)
                     next_id += 1
 
     else:
         raise ValueError("Procedure not recognized")
 
     return rows
-
 
 
 def update_chart_rows(
@@ -558,6 +601,7 @@ def update_chart_rows(
         id_column:str="id", 
         update_columns:List[str]=None, 
         send:bool=True,
+        full_update:bool=False,
         vectorization:bool=True,
         dest_table:str="",
         string_in:str="title", 
@@ -591,9 +635,9 @@ def update_chart_rows(
         dest.connect()
         destination_table = dest.gettable(dest_table)
 
-        rows = df.loc[mask]
+        rows = df if full_update else df.loc[mask] 
 
-        for row in rows:
+        for _, row in rows.iterrows():
             if vectorization:
                 embs = model.encode(row[string_in],
                                     convert_to_numpy=True,

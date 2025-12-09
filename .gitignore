@@ -3,3 +3,8 @@
 
 # Connection config
 connDest.json
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
