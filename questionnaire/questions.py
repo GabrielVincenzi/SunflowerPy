@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-from toolbi import send_df
+from tools.toolbi import send_df
 
 # ----------------- QUESTIONS -----------------
 q_file_path = "questionnaire/questions.csv"

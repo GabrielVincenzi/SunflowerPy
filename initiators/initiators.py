@@ -1,11 +1,12 @@
-from toolbi import SqlDatasource
+from tools.toolbi import SqlDatasource
 
 dest = SqlDatasource()
 dest.load('connDest.json')
 dest.connect()
 
 
-#dest.execute("""DROP TABLE Userquestionstate""").commit()
+# dest.execute("""DROP TABLE Dbs""").commit()
+#dest.execute("""DELETE FROM charts WHERE "category" = 'test'""").commit()
 
 # DBS
 dest.execute("""
@@ -23,15 +24,38 @@ CREATE INDEX IF NOT EXISTS idx_db_name ON Dbs(db_name);
 # Charts
 dest.execute("""
 CREATE TABLE IF NOT EXISTS Charts (
-    id SERIAL PRIMARY KEY,
-    title VARCHAR(50) NOT NULL,
-    description TEXT NULL,
+    id SERIAL,
+    chart_id UUID PRIMARY KEY,
     db_name VARCHAR(50) NOT NULL,
-    category VARCHAR(20) NULL,
-    chart_type VARCHAR(10) NULL,
+    category VARCHAR(20) NOT NULL,
+    chart_type VARCHAR(10) NOT NULL,
     vars TEXT NULL,
     vector_dim VECTOR(384)
 );
+""").commit()
+
+# Charts_text
+dest.execute("""
+CREATE TABLE IF NOT EXISTS charts_text (
+    chart_id UUID NOT NULL,
+    text_category VARCHAR(20) NOT NULL,
+    lang VARCHAR(10) NOT NULL,
+    text_input TEXT NOT NULL,
+    PRIMARY KEY (chart_id, text_category, lang)
+);
+             
+CREATE INDEX IF NOT EXISTS idx_id_text_lang ON charts_text(chart_id, text_category, lang);
+""").commit()
+
+# Page translation
+dest.execute("""
+CREATE TABLE IF NOT EXISTS translations (
+  lang VARCHAR(10) PRIMARY KEY,
+  version TIMESTAMPTZ DEFAULT now(),
+  payload JSONB NOT NULL
+);
+
+CREATE INDEX ON translations (lang);
 """).commit()
 
 # Categories
@@ -49,7 +73,7 @@ CREATE TABLE IF NOT EXISTS Events (
     id SERIAL PRIMARY KEY,
     user_id VARCHAR(50) NOT NULL,
     action VARCHAR(10) NOT NULL,
-    object_id VARCHAR(50) NOT NULL,
+    object_id UUID NOT NULL,
     time TIMESTAMP NOT NULL
 );
              
@@ -61,7 +85,7 @@ dest.execute("""
 CREATE TABLE IF NOT EXISTS Saved (
     id SERIAL PRIMARY KEY,
     user_id VARCHAR(50) NOT NULL,
-    object_id VARCHAR(50) NOT NULL,
+    object_id UUID NOT NULL,
     time TIMESTAMP NOT NULL
 );
 
@@ -72,7 +96,7 @@ CREATE INDEX IF NOT EXISTS idx_user_id ON Saved(user_id);
 dest.execute("""
 CREATE TABLE IF NOT EXISTS Questions (
     id SERIAL PRIMARY KEY,
-    object_id VARCHAR(50) NOT NULL,
+    object_id UUID NOT NULL,
     title TEXT NOT NULL,
     body TEXT NOT NULL,
     explanation TEXT,

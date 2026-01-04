@@ -1,0 +1,99 @@
+{
+    "welcome": {
+        "slides": [
+            {
+                "title": "Welcome in SunFlower",
+                "description": "Reshape open data into Open Understanding"
+            },
+            {
+                "title": "Connecting Europe",
+                "description": "Among adults without upper secondary education, 61% scored at or below Level 1 in literacy in the OECD Survey of Adult Skills, meaning they could understand, at most, short texts on familiar topics. Among those with upper secondary attainment, 30% do not exceed Level 1, and even among adults with tertiary attainment, 13% score at or below this level. These results underscore that simply expanding educational opportunities is not enough; education systems must also ensure that learners develop the skills they need to thrive."
+            },
+            {
+                "title": "Spark Critical Thinking",
+                "description": "Quick, Research driven answers to bring data back to the people"
+            }
+        ],
+        "skip": "Skip",
+        "buttons": {
+            "next": "Next",
+            "getStarted": "Get Started"
+        }
+    },
+    "signIn": {
+        "title": "Sign In",
+        "socialButtons": {
+            "apple": "Continue with Apple",
+            "google": "Continue with Google"
+        },
+        "orSeparator": "OR",
+        "emailPlaceholder": "Email",
+        "nextButton": "Next",
+        "skip": "Skip for now",
+        "termsPrefix": "By signing in, you agree to",
+        "termsLink": "Sunflower's Terms of Service"
+    },
+    "home": {
+        "questionOfTheDay": "Question",
+        "byCategory": "By Category",
+        "categories": {
+            "recommended": {
+                "title": "Recommended",
+                "subtitle": "Become an Expert"
+            },
+            "random": {
+                "title": "Random",
+                "subtitle": "Pop the Bubble"
+            }
+        },
+        "chartsSection": "And Today What?"
+    },
+    "profile": {
+        "preferences": "Preferences",
+        "customerSupport": "Customer Support",
+        "signOut": "Sign out",
+        "signUpOrSignIn": "Sign up or sign in",
+        "username": "UserName",
+        "emailLabel": "Email"
+    },
+    "saved": {
+        "title": "Saved Charts",
+        "noData": "No data available",
+        "notSignedIn": "NOT Signed in"
+    },
+    "search": {
+        "placeholder": "Search ...",
+        "resultsFor": "Search results for",
+        "emptyState": "The future of Data Driven Information is here"
+    },
+    "random": {
+        "title": "Random"
+    },
+    "recommended": {
+        "title": "Recommended"
+    },
+    "chartPage": {
+        "buttons": {
+            "filter": "Filters",
+            "cancel": "Cancel",
+            "ok": "OK",
+            "save": "Save",
+            "saved": "Saved"
+        },
+        "sections": {
+            "overview": "Overview",
+            "variable": "Variable",
+            "country": "Country",
+            "startPeriod": "Start period",
+            "endPeriod": "End period"
+        }
+    },
+    "common": {
+        "placeholders": {
+            "loading": "Loading...",
+            "noData": "No data available"
+        },
+        "goBack": "Go back",
+        "notSet": "Not set"
+    }
+}

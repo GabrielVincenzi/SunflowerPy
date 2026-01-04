@@ -1,11 +1,35 @@
-# Data Sources:
-italy_regional_exp : https://portalecpt.agenziacoesione.gov.it/CPTDE/spese/s_regioni/CPTDE_SpeseRegioni.html
+# Databases are already in the Charts?
+Eurostat:
+demographic ✅
+earnings
+employment ✅
+genderViolence ✅
+genderViolenceSpecific
+government ✅
+healthSelfPerc
+income ✅
+macroeconomic ✅
+migrations
+pollutionIndustry ✅
+schooling ✅
 
+OECD:
+environment
+government
+households
+inflContrib
+schooling
+trustSatisf
+wellbeing
 
-## Cockrach DB works:
+World Bank
+environment
 
-## Petals:
-- Coincidence, luck and effort (line up people flipping their coin ten times and the press will go to the 10 heads guy)
-
-## Pending Datasets:
-migr_pop1ctz, migr_pop8ctb, migr_pop7ctz: too much columns (+1800)
+Static:
+energyEmber
+energyOwid
+healthSelf
+ItalyUnobservedEcon
+literacy ✅
+press ✅
+ssp ✅
