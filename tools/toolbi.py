@@ -1196,3 +1196,110 @@ def update_mobile_from_json(
     app_table.insertone(row)
     app_table.commit()
     dest.disconnect()
+
+
+def update_questions_and_choices(
+    questions: list[dict],
+    choices: list[dict],
+    json_questions="library/questions.json",
+    json_choices="library/choices.json",
+    conn_dest="connDest.json",
+    overwrite_existing: bool = True,
+    send: bool = True,
+    ret_data: bool = False,
+):
+    """
+    Update questions and choices in JSON + database.
+    Automatically assigns IDs to questions and ensures choices use the correct question_id.
+    """
+
+    # ---------- Load JSON ----------
+    if os.path.exists(json_questions):
+        with open(json_questions, "r", encoding="utf-8") as f:
+            json_q = json.load(f)
+    else:
+        json_q = {}
+
+    if os.path.exists(json_choices):
+        with open(json_choices, "r", encoding="utf-8") as f:
+            json_a = json.load(f)
+    else:
+        json_a = {}
+
+    # ---------- DB setup ----------
+    if send:
+        dest = SqlDatasource()
+        dest.load(conn_dest)
+        dest.connect()
+
+        q_table = dest.gettable("questions")
+        a_table = dest.gettable("choices")
+
+        # Fetch the current max ID in questions table
+        res = q_table.datasource.execute("SELECT MAX(id) as max_id FROM questions").fetchone()
+        max_qid = res["max_id"] if res and res["max_id"] is not None else 0
+    else:
+        max_qid = max([int(k) for k in json_q.keys()], default=0)
+
+    # ---------- QUESTIONS ----------
+    qid_map = {}  # map question object -> assigned DB id
+
+    for q in questions:
+        qid = q.get("id")
+        if qid is None:
+            max_qid += 1
+            qid = max_qid
+            q["id"] = qid
+
+        qid_map[id(q)] = qid
+        key = str(qid)
+
+        # Update JSON
+        if key not in json_q or overwrite_existing:
+            json_q[key] = q.copy()
+
+        # Insert into DB
+        if send:
+            q_table.insertone(q)
+
+    # ---------- CHOICES ----------
+    for a in choices:
+        # Assign question_id if missing
+        if "question_id" not in a or a["question_id"] is None:
+            if len(questions) == 1:
+                a["question_id"] = qid_map[id(questions[0])]
+            else:
+                raise ValueError(
+                    "Choice missing 'question_id' and cannot auto-assign when multiple questions provided"
+                )
+
+        aid = a.get("id")
+        if aid is None:
+            aid = max([int(k) for k in json_a.keys()], default=0) + 1
+            a["id"] = aid
+
+        key = str(aid)
+
+        # Update JSON
+        if key not in json_a or overwrite_existing:
+            json_a[key] = a.copy()
+
+        # Insert into DB
+        if send:
+            a_table.insertone(a)
+
+    # ---------- Commit DB ----------
+    if send:
+        q_table.commit()
+        a_table.commit()
+        dest.disconnect()
+
+    # ---------- Write JSON ----------
+    with open(json_questions, "w", encoding="utf-8") as f:
+        json.dump(json_q, f, indent=4, ensure_ascii=False)
+
+    with open(json_choices, "w", encoding="utf-8") as f:
+        json.dump(json_a, f, indent=4, ensure_ascii=False)
+
+    if ret_data:
+        return json_q, json_a

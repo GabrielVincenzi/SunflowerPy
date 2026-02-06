@@ -1,15 +1,17 @@
 # Databases are already in the Charts?
 Eurostat:
-demographic ✅
+crime
+productivity
 earnings
-employment ✅
-genderViolence ✅
 genderViolenceSpecific
-government ✅
 healthSelfPerc
+migrations
+demographic ✅
+employment ✅ # misses part and full time
+genderViolence ✅
+government ✅
 income ✅
 macroeconomic ✅
-migrations
 pollutionIndustry ✅
 schooling ✅
 

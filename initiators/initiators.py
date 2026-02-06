@@ -5,7 +5,7 @@ dest.load('connDest.json')
 dest.connect()
 
 
-# dest.execute("""DROP TABLE Dbs""").commit()
+#dest.execute("""DROP TABLE Questions""").commit()
 #dest.execute("""DELETE FROM charts WHERE "category" = 'test'""").commit()
 
 # DBS
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS Events (
     user_id VARCHAR(50) NOT NULL,
     action VARCHAR(10) NOT NULL,
     object_id UUID NOT NULL,
-    time TIMESTAMP NOT NULL
+    event_time TIMESTAMPTZ DEFAULT now()
 );
              
 CREATE INDEX IF NOT EXISTS idx_user_id ON Events(user_id);
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS Saved (
     id SERIAL PRIMARY KEY,
     user_id VARCHAR(50) NOT NULL,
     object_id UUID NOT NULL,
-    time TIMESTAMP NOT NULL
+    event_time TIMESTAMPTZ DEFAULT now()
 );
 
 CREATE INDEX IF NOT EXISTS idx_user_id ON Saved(user_id);
@@ -124,10 +124,10 @@ CREATE INDEX IF NOT EXISTS idx_choices_question ON choices(question_id);
 
 # User question state
 dest.execute("""
-CREATE TABLE IF NOT EXISTS UserQuestionState (
-  user_id BIGINT NOT NULL,
+CREATE TABLE IF NOT EXISTS UserQuestionStates (
+  user_id VARCHAR(50) NOT NULL,
   question_id BIGINT NOT NULL,
-  next_due_at TIMESTAMP NOT NULL,
+  next_due_at TIMESTAMPTZ NOT NULL,
   consecutive_correct SMALLINT DEFAULT 0,
   PRIMARY KEY (user_id, question_id)
 );

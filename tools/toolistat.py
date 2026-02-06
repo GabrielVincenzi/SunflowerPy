@@ -6,6 +6,7 @@ from io import StringIO
 from tools.tooldb import parse_time_column
 
 API_BASE = "https://esploradati.istat.it/SDMXWS/rest"
+XML_LANG = "{http://www.w3.org/XML/1998/namespace}lang"
 
 def load_istat_catalogue(provider: str = "IT1") -> dict:
     """
@@ -51,44 +52,91 @@ def load_istat_catalogue(provider: str = "IT1") -> dict:
     return dataflows
 
 
-def get_available_values(id:str):
-    """Return a dictionary with available values for each dimension in the DataSet instance"""
-    url = f"{API_BASE}/availableconstraint/{id}/?references=all&detail=full"
+def _strip_ns_root(xml_text):
+    it = ET.iterparse(StringIO(xml_text))
+    for _, el in it:
+        if "}" in el.tag:
+            el.tag = el.tag.rpartition("}")[2]
+    return it.root
 
-    response = requests.get(url)
-    response.raise_for_status()
-    if response.text == 'No available data found for the requested query':
-        raise ValueError(f'No available data found for the requested query (dataset {id})')
-    
-    tree = ET.iterparse(StringIO(response.text))
 
-    for _, el in tree:
-        _, _, el.tag = el.tag.rpartition('}')
+def get_dimension_values(
+    dataflow_id: str,
+    dimension: str,
+    lang: str = "it",
+    dataframe: bool = True,
+    agency_id: str = "IT1",
+):
+    """
+    Standalone ISTAT-safe function.
+    Given a dataflow id and a dimension id, return the dimension values with labels.
+    """
 
-    root = tree.root
+    # Dataflow → Datastructure
+    r = requests.get(f"{API_BASE}/dataflow/{agency_id}/{dataflow_id}")
+    r.raise_for_status()
+    root = _strip_ns_root(r.text)
 
-    dimensions_values = {}
-    for dimension in root.iter("Codelist"):
-        dimension_id = dimension.get("id")
+    ref = root.find(".//Structure/Ref")
+    if ref is None:
+        raise ValueError("Datastructure reference not found")
 
-        values = {}
-        value_id_l, value_descr_l = [], []
+    dsd_id = ref.get("id")
+    dsd_version = ref.get("version")
+    dsd_agency = ref.get("agencyID") or agency_id
 
-        for value in dimension.iter("Code"):
-            value_id = value.get("id")
-            value_descr = [name.text for name in value.findall("Name")][1]
-            value_id_l.append(value_id)
-            value_descr_l.append(value_descr)
+    # Datastructure
+    dsd_url = f"{API_BASE}/datastructure/{dsd_agency}/{dsd_id}"
+    if dsd_version:
+        dsd_url += f"/{dsd_version}"
 
-        values["values_ids"] = value_id_l
-        values["values_description"] = value_descr_l
-        dimensions_values[dimension_id] = values
+    r = requests.get(dsd_url)
+    r.raise_for_status()
+    root = _strip_ns_root(r.text)
 
-    #for dimension_id in list(dimensions_values.keys()):
-    #    dimension = self.get_dimension_name(dimension_id)
-    #    dimensions_values[dimension] = dimensions_values.pop(dimension_id)
+    # Find dimension → Codelist Ref (IMPORTANT FIX)
+    dim = root.find(f".//Dimension[@id='{dimension}']")
+    if dim is None:
+        raise ValueError(f"Dimension '{dimension}' not found")
 
-    return dimensions_values
+    cl_ref = None
+    for ref in dim.iter("Ref"):
+        if ref.get("class") == "Codelist":
+            cl_ref = ref
+            break
+
+    if cl_ref is None:
+        raise ValueError("Codelist reference not found")
+
+    cl_id = cl_ref.get("id")
+    cl_version = cl_ref.get("version")
+    cl_agency = cl_ref.get("agencyID") or dsd_agency
+
+    # Codelist
+    cl_url = f"{API_BASE}/codelist/{cl_agency}/{cl_id}"
+    if cl_version:
+        cl_url += f"/{cl_version}"
+
+    r = requests.get(cl_url)
+    r.raise_for_status()
+    root = _strip_ns_root(r.text)
+
+    rows = []
+    for code in root.iter("Code"):
+        label = None
+        for name in code.findall("Name"):
+            if name.get(XML_LANG) == lang:
+                label = name.text
+                break
+        if label is None:
+            label = code.findtext("Name")
+
+        rows.append({"code": code.get("id"), "label": label})
+
+    if dataframe:
+        return pd.DataFrame(rows)
+    return {r["code"]: r["label"] for r in rows}
+
 
 def get_istat_dataset(dataset_code: str, filters: str = "", start_year: str = None, end_year: str = None, provider: str = "IT1", version:str=None) -> pd.DataFrame:
     '''

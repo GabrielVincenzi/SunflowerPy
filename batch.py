@@ -8,6 +8,7 @@ DatasourceTools.execute_modules(['initiators.initiators'])
 # Create also tables defined from excel static files
 # While updating both Data Warehouse and local JSON files for translations and maintenance
 modules = [
+    'datasets.eurostat.crimes',
     'datasets.eurostat.demographic',
     'datasets.eurostat.earnings',
     'datasets.eurostat.employment',
@@ -16,9 +17,11 @@ modules = [
     'datasets.eurostat.government',
     'datasets.eurostat.macroeconomic',
     'datasets.eurostat.pollutionIndustry',
+    'datasets.eurostat.productivity',
     'datasets.eurostat.genderViolence',
     'datasets.eurostat.migrations',
-    'datasets.eurostat.healthSelfPerc', # 20500 columns
+    'datasets.eurostat.healthSelfPerc',
+    'datasets.eurostat.workInPoor',
 
     'datasets.oecd.inflContrib',
     'datasets.oecd.trustSatisf',

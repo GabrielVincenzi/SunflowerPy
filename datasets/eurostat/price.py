@@ -8,7 +8,7 @@ keys = config.KEYS
 start_year = config.START_YEAR
 end_year = config.END_YEAR
 
-# Annual net earnings
+# Household Index of Consumption prices
 countries = [
     'AL', 'AT', 'BE', 'BG', 'CH', 'CY', 'CZ', 'DE', 'DK', 'EA', 
     'EE', 'EEA', 'EL', 'ES', 'EU', 'FI', 'FR', 'HR', 'HU', 'IE', 'IS',

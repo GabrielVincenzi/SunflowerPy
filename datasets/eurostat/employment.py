@@ -26,6 +26,7 @@ employment_industry_df = et.get_eurostat_dataset(
     end_year=end_year
 )
 
+# Inactivity by age and sex
 inactive_df = et.get_eurostat_dataset(
     dataset_code="lfsq_ipga",
     filters=f"Q.PC..Y15-24+Y15-64+Y25-54+Y55-64.", 
@@ -33,6 +34,7 @@ inactive_df = et.get_eurostat_dataset(
     end_year=end_year
 )
 
+# Unemployment by age, sex and education
 unemployment_df = et.get_eurostat_dataset(
     dataset_code="lfsq_urgaed",
     filters=f"Q.PC..Y15-24+Y15-64+Y25-54+Y55-64.ED0-2+ED3_4+ED5-8+TOTAL.", 
@@ -40,6 +42,7 @@ unemployment_df = et.get_eurostat_dataset(
     end_year=end_year
 )
 
+# Employment by age, sex and education
 employment_df = et.get_eurostat_dataset(
     dataset_code="lfsq_ergaed",
     filters=f"Q.PC..Y15-24+Y15-64+Y25-54+Y55-64.ED0-2+ED3_4+ED5-8+TOTAL.", 
@@ -78,15 +81,9 @@ descriptions = {
 update_json(workforce_df, db_name, pattern, descriptions)
 
 pattern = ['name', 'type']
-descriptions = {
-    'emp': 'Employment',
-}
 update_json(pop_df, db_name, pattern, descriptions)
 
 pattern = ['name', 'sector']
-descriptions = {
-    'emp': 'Employment',
-}
 update_json(employment_industry_df, db_name, pattern, descriptions)
 
 # ------ Connection -------- #

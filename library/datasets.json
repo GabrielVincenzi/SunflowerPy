@@ -1434,112 +1434,6 @@
             "description": "Women who have witnessed violence between parents during childhood committed by the Mother"
         }
     },
-    "e_health_selfrep": {
-        "svdp-lim": {
-            "sex": "f,m,t",
-            "age": "total,y-ge15,y-ge18,y-ge65,y-ge75,y15-24,y15-29,y15-64,y18-24,y18-44,y18-64,y25-34,y25-64,y30-54,y35-44,y45-54,y45-64,y55-64,y65-74",
-            "level": "mild,mod,mod-mods-sev,mods,none-min,sev",
-            "lev-lim": "mod,none,sev,sm-sev",
-            "unit": "pc",
-            "description": "Severity of current depressive symptoms by level of disability (activity limitation), sex and age"
-        },
-        "svdp-edu": {
-            "sex": "f,m,t",
-            "age": "total,y-ge18,y-ge65,y-ge75,y15-19,y15-24,y15-29,y15-64,y18-24,y18-44,y18-64,y20-24,y25-29,y25-34,y25-64,y35-44,y45-54,y45-64,y55-64,y65-74",
-            "level": "mild,mod,mod-mods-sev,mods,none-min,sev",
-            "educ": "ed0-2,ed3-4,ed5-8,total",
-            "unit": "pc",
-            "description": "Severity of current depressive symptoms by level of education, sex and age"
-        },
-        "svdp-inc": {
-            "sex": "f,m,t",
-            "age": "total,y-ge18,y-ge65,y-ge75,y15-24,y15-29,y15-64,y18-24,y18-44,y18-64,y25-34,y25-64,y35-44,y45-54,y45-64,y55-64,y65-74",
-            "level": "mild,mod,mod-mods-sev,mods,none-min,sev",
-            "inc": "qu1,qu2,qu3,qu4,qu5,total",
-            "unit": "pc",
-            "description": "Severity of current depressive symptoms by income quintile, sex and age"
-        },
-        "svdp-urb": {
-            "sex": "f,m,t",
-            "age": "total,y-ge18,y-ge65,y-ge75,y15-24,y15-29,y15-64,y18-24,y18-44,y18-64,y25-34,y25-64,y35-44,y45-54,y45-64,y55-64,y65-74",
-            "level": "mild,mod,mod-mods-sev,mods,none-min,sev",
-            "deg-urb": "deg1,deg2,deg3,total",
-            "unit": "pc",
-            "description": "Severity of current depressive symptoms by sex, age and degree of urbanisation"
-        },
-        "svdp-citiz": {
-            "sex": "f,m,t",
-            "age": "total,y-ge18,y-ge65,y-ge75,y15-24,y15-29,y15-64,y18-24,y18-44,y18-64,y25-34,y25-64,y35-44,y45-54,y45-64,y55-64,y65-74",
-            "level": "mild,mod,mod-mods-sev,mods,none-min,sev",
-            "citiz": "eu27-2020-for,eu28-for,for,nat,neu27-2020-for,neu28-for",
-            "unit": "pc",
-            "description": "Severity of current depressive symptoms by sex, age and country of citizenhip"
-        },
-        "svbp-edu": {
-            "sex": "f,m,t",
-            "age": "total,y-ge65,y-ge75,y15-24,y15-29,y15-44,y15-64,y25-34,y35-44,y45-54,y45-64,y55-64,y65-74",
-            "level": "m-vm,mild,mod,none,s-vs,vmild",
-            "educ": "ed0-2,ed3-4,ed5-8,total",
-            "unit": "pc",
-            "description": "Severity of bodily pain by sex, age and educational attainment level"
-        },
-        "svbp-citiz": {
-            "sex": "f,m,t",
-            "age": "total,y-ge65,y-ge75,y15-24,y15-29,y15-44,y15-64,y25-34,y25-64,y35-44,y45-54,y45-64,y55-64,y65-74",
-            "level": "m-vm,mild,mod,none,s-vs,vmild",
-            "citiz": "eu27-2020-for,eu28-for,for,nat,neu27-2020-for,neu28-for",
-            "unit": "pc",
-            "description": "Severity of bodily pain by sex, age and country of citizenship"
-        },
-        "svbp-lim": {
-            "sex": "f,m,t",
-            "age": "total,y-ge65,y-ge75,y15-24,y15-29,y15-44,y15-64,y25-34,y25-64,y35-44,y45-54,y45-64,y55-64,y65-74",
-            "level": "m-vm,mild,mod,none,s-vs,vmild",
-            "lev-lim": "mod,none,sev,sm-sev",
-            "unit": "pc",
-            "description": "Severity of bodily pain by level of disability (activity limitation), sex and age"
-        },
-        "sph-lab": {
-            "sex": "f,m,t",
-            "age": "y-ge16,y-ge60,y-ge65,y-ge75,y-ge85,y16-24,y16-29,y16-44,y16-64,y25-29,y25-34,y25-44,y35-44,y45-49,y45-54,y45-64,y55-64,y65-74,y75-84",
-            "level": "b-vb,bad,fair,good,vbad,vg-g,vgood",
-            "work": "emp,inac-oth,nemp,nsal,pop,ret,sal,une",
-            "unit": "pc",
-            "description": "Self-perceived health by sex, age and labour status"
-        },
-        "sph-edu": {
-            "sex": "f,m,t",
-            "age": "y-ge16,y-ge65,y-ge75,y-ge85,y16-24,y16-29,y16-44,y16-64,y25-29,y25-34,y25-64,y35-44,y45-49,y45-54,y45-64,y55-64,y65-74,y75-84",
-            "level": "b-vb,bad,fair,good,vbad,vg-g,vgood",
-            "educ": "ed0-2,ed3-4,ed5-8,total",
-            "unit": "pc",
-            "description": "Self-perceived health by sex, age and educational attainment level"
-        },
-        "sph-inc": {
-            "sex": "f,m,t",
-            "age": "y-ge16,y-ge65,y-ge75,y-ge85,y16-19,y16-24,y16-29,y16-44,y16-64,y18-44,y20-24,y20-29,y25-29,y25-34,y35-44,y45-49,y45-54,y45-64,y55-64,y65-74,y75-84",
-            "level": "b-vb,bad,fair,good,vbad,vg-g,vgood",
-            "inc": "qu1,qu2,qu3,qu4,qu5,total",
-            "unit": "pc",
-            "description": "Self-perceived health by sex, age and income quintile"
-        },
-        "sph-urb": {
-            "sex": "f,m,t",
-            "age": "total,y-ge16,y-ge65,y-ge75,y-ge85,y16-24,y16-29,y16-44,y16-64,y25-29,y25-34,y35-44,y45-54,y45-64,y55-64,y65-74,y75-84",
-            "level": "b-vb,bad,fair,good,vbad,vg-g,vgood",
-            "deg-urb": "deg1,deg2,deg3,total",
-            "unit": "pc",
-            "description": "Self-perceived health by sex, age and degree of urbanisation"
-        },
-        "sph-citiz": {
-            "sex": "f,m,t",
-            "age": "y-ge16,y-ge65,y-ge75,y-ge85,y16-24,y16-29,y16-44,y16-64,y20-64,y25-29,y25-34,y25-54,y35-44,y45-54,y45-64,y55-64,y65-74,y75-84",
-            "level": "b-vb,bad,fair,good,vbad,vg-g,vgood",
-            "citiz": "eu27-2007-for,eu27-2020-for,eu28-for,for,nat,neu27-2007-for,neu27-2020-for,neu28-for",
-            "unit": "pc",
-            "description": "Self-perceived health by sex, age and groups of country of citizenship"
-        }
-    },
     "e_health_socsupp": {
         "ssup-edu": {
             "sex": "f,m,t",
@@ -3217,6 +3111,334 @@
             "scenario": "ssp4-34,ssp4-60",
             "model": "GCAM4",
             "description": "Emissions (Mt/yr) from CMIP6 model of Volatile Organic Compounds (often NMVOC: ozone precursors that participate in tropospheric photochemistry."
+        }
+    },
+    "e_earnings_a_meur": {
+        "earn-a": {
+            "nace_r2": "b-f,b-n,b-s-x-o,g-n,p-s",
+            "isco08": "oc1-5,oc6-8,oc7-9,total",
+            "worktime": "ft,pt,tot-fte,total",
+            "age": "total,y-ge60,y-lt30,y30-39,y40-49,y50-59",
+            "sex": "f,m,t",
+            "unit": "mean-e-eur,med-e-eur",
+            "description": "Structure of earnings survey: annual earnings by sex, age, worktime, economic activity and worker type"
+        }
+    },
+    "e_earnings_a_mpps": {
+        "earn-a": {
+            "nace_r2": "b-f,b-n,b-s-x-o,g-n,p-s",
+            "isco08": "oc1-5,oc6-8,oc7-9,total",
+            "worktime": "ft,pt,tot-fte,total",
+            "age": "total,y-ge60,y-lt30,y30-39,y40-49,y50-59",
+            "sex": "f,m,t",
+            "unit": "mean-e-pps,med-e-pps",
+            "description": "Structure of earnings survey: annual earnings by sex, age, worktime, economic activity and worker type"
+        }
+    },
+    "e_earnings_a_deur": {
+        "earn-a": {
+            "nace_r2": "b-f,b-n,b-s-x-o,g-n,p-s",
+            "isco08": "oc1-5,oc6-8,oc7-9,total",
+            "worktime": "ft,pt,tot-fte,total",
+            "age": "total,y-ge60,y-lt30,y30-39,y40-49,y50-59",
+            "sex": "f,m,t",
+            "unit": "d1-e-eur,d9-e-eur",
+            "description": "Structure of earnings survey: annual earnings by sex, age, worktime, economic activity and worker type"
+        }
+    },
+    "e_earnings_a_dpps": {
+        "earn-a": {
+            "nace_r2": "b-f,b-n,b-s-x-o,g-n,p-s",
+            "isco08": "oc1-5,oc6-8,oc7-9,total",
+            "worktime": "ft,pt,tot-fte,total",
+            "age": "total,y-ge60,y-lt30,y30-39,y40-49,y50-59",
+            "sex": "f,m,t",
+            "unit": "d1-e-pps,d9-e-pps",
+            "description": "Structure of earnings survey: annual earnings by sex, age, worktime, economic activity and worker type"
+        }
+    },
+    "e_earnings_m_meur": {
+        "earn-m": {
+            "nace_r2": "b-f,b-n,b-s-x-o,g-n,p-s",
+            "isco08": "oc1-5,oc6-8,oc7-9,total",
+            "worktime": "ft,pt,tot-fte,total",
+            "age": "total,y-ge60,y-lt30,y30-39,y40-49,y50-59",
+            "sex": "f,m,t",
+            "unit": "mean-e-eur,med-e-eur",
+            "description": "Structure of earnings survey: monthly earnings by sex, age, worktime, economic activity and worker type"
+        }
+    },
+    "e_earnings_m_mpps": {
+        "earn-m": {
+            "nace_r2": "b-f,b-n,b-s-x-o,g-n,p-s",
+            "isco08": "oc1-5,oc6-8,oc7-9,total",
+            "worktime": "ft,pt,tot-fte,total",
+            "age": "total,y-ge60,y-lt30,y30-39,y40-49,y50-59",
+            "sex": "f,m,t",
+            "unit": "mean-e-pps,med-e-pps",
+            "description": "Structure of earnings survey: monthly earnings by sex, age, worktime, economic activity and worker type"
+        }
+    },
+    "e_earnings_m_deur": {
+        "earn-m": {
+            "nace_r2": "b-f,b-n,b-s-x-o,g-n,p-s",
+            "isco08": "oc1-5,oc6-8,oc7-9,total",
+            "worktime": "ft,pt,tot-fte,total",
+            "age": "total,y-ge60,y-lt30,y30-39,y40-49,y50-59",
+            "sex": "f,m,t",
+            "unit": "d1-e-eur,d9-e-eur",
+            "description": "Structure of earnings survey: monthly earnings by sex, age, worktime, economic activity and worker type"
+        }
+    },
+    "e_earnings_m_dpps": {
+        "earn-m": {
+            "nace_r2": "b-f,b-n,b-s-x-o,g-n,p-s",
+            "isco08": "oc1-5,oc6-8,oc7-9,total",
+            "worktime": "ft,pt,tot-fte,total",
+            "age": "total,y-ge60,y-lt30,y30-39,y40-49,y50-59",
+            "sex": "f,m,t",
+            "unit": "d1-e-pps,d9-e-pps",
+            "description": "Structure of earnings survey: monthly earnings by sex, age, worktime, economic activity and worker type"
+        }
+    },
+    "e_earnings_h_meur": {
+        "earn-h": {
+            "nace_r2": "b-f,b-n,b-s-x-o,g-n,p-s",
+            "isco08": "oc1-5,oc6-8,oc7-9,total",
+            "worktime": "ft,pt,total",
+            "age": "total,y-ge50,y-ge60,y-lt20,y-lt30,y20-29,y30-39,y30-49,y40-49,y50-59",
+            "sex": "f,m,t",
+            "unit": "mean-e-eur,med-e-eur",
+            "description": "Structure of earnings survey: hourly earnings by sex, age, worktime, economic activity and worker type"
+        }
+    },
+    "e_earnings_h_mpps": {
+        "earn-h": {
+            "nace_r2": "b-f,b-n,b-s-x-o,g-n,p-s",
+            "isco08": "oc1-5,oc6-8,oc7-9,total",
+            "worktime": "ft,pt,total",
+            "age": "total,y-ge50,y-ge60,y-lt20,y-lt30,y20-29,y30-39,y30-49,y40-49,y50-59",
+            "sex": "f,m,t",
+            "unit": "mean-e-pps,med-e-pps",
+            "description": "Structure of earnings survey: hourly earnings by sex, age, worktime, economic activity and worker type"
+        }
+    },
+    "e_earnings_h_deur": {
+        "earn-h": {
+            "nace_r2": "b-f,b-n,b-s-x-o,g-n,p-s",
+            "isco08": "oc1-5,oc6-8,oc7-9,total",
+            "worktime": "ft,pt,total",
+            "age": "total,y-ge50,y-ge60,y-lt20,y-lt30,y20-29,y30-39,y30-49,y40-49,y50-59",
+            "sex": "f,m,t",
+            "unit": "d1-e-eur,d9-e-eur",
+            "description": "Structure of earnings survey: hourly earnings by sex, age, worktime, economic activity and worker type"
+        }
+    },
+    "e_earnings_h_dpps": {
+        "earn-h": {
+            "nace_r2": "b-f,b-n,b-s-x-o,g-n,p-s",
+            "isco08": "oc1-5,oc6-8,oc7-9,total",
+            "worktime": "ft,pt,total",
+            "age": "total,y-ge50,y-ge60,y-lt20,y-lt30,y20-29,y30-39,y30-49,y40-49,y50-59",
+            "sex": "f,m,t",
+            "unit": "d1-e-pps,d9-e-pps",
+            "description": "Structure of earnings survey: hourly earnings by sex, age, worktime, economic activity and worker type"
+        }
+    },
+    "e_crimes": {
+        "prs-off": {
+            "sex": "f,m,t",
+            "iccs": "iccs0101,iccs03011,iccs03012",
+            "unit": "nr,p-hthab",
+            "description": "Prisoners by offence category and sex"
+        },
+        "prs-age": {
+            "sex": "f,m,t",
+            "age": "adult,juvenile,total",
+            "unit": "nr,p-hthab",
+            "description": "Prisoners by age and sex"
+        },
+        "prn-cap": {
+            "indic_cr": "pris-act-cap,pris-off-cap,pris-ovrcrw",
+            "unit": "nr,p-hthab",
+            "description": "Prison capacity and number of persons held"
+        },
+        "prs-ctz": {
+            "citiz": "for,nat,total",
+            "unit": "nr,p-hthab",
+            "description": "Prisoners by citizenship"
+        },
+        "prs-lgst": {
+            "lgst": "tri-pre,tri-spsd",
+            "unit": "nr,p-hthab,pc",
+            "description": "Prisoners by legal status of the trial process"
+        }
+    },
+    "e_health_selfrep_dep": {
+        "svdp-lim": {
+            "sex": "f,m,t",
+            "age": "y65-74,y35-44,y30-54,y15-29,y-ge65,y-ge75,y15-64,y55-64,y-ge15,y18-64,y-ge18,y25-34,y25-64,y18-24,y45-64,total,y18-44,y45-54,y15-24",
+            "level": "mod,mods,mild,none-min,sev,mod-mods-sev",
+            "lev-lim": "mod,sm-sev,none,sev",
+            "unit": "pc",
+            "description": "Severity of current depressive symptoms by level of disability (activity limitation), sex and age"
+        },
+        "svdp-edu": {
+            "sex": "f,m,t",
+            "age": "y65-74,y35-44,y20-24,y15-29,y-ge65,y-ge75,y25-29,y15-64,y55-64,y18-64,y-ge18,y25-34,y25-64,y18-24,y15-19,y45-64,total,y18-44,y45-54,y15-24",
+            "level": "mod,mods,mild,none-min,sev,mod-mods-sev",
+            "educ": "ed5-8,ed3-4,ed0-2,total",
+            "unit": "pc",
+            "description": "Severity of current depressive symptoms by level of education, sex and age"
+        },
+        "svdp-inc": {
+            "sex": "f,m,t",
+            "age": "y25-34,total,y45-54,y55-64,y65-74,y25-64,y35-44,y18-64,y18-24,y18-44,y15-29,y-ge65,y-ge18,y45-64,y-ge75,y15-64,y15-24",
+            "level": "mod,mods,mild,none-min,sev,mod-mods-sev",
+            "inc": "total,qu1,qu5,qu3,qu4,qu2",
+            "unit": "pc",
+            "description": "Severity of current depressive symptoms by income quintile, sex and age"
+        },
+        "svdp-urb": {
+            "sex": "f,m,t",
+            "age": "y25-34,total,y45-54,y55-64,y65-74,y25-64,y35-44,y18-64,y18-24,y18-44,y15-29,y-ge65,y-ge18,y45-64,y-ge75,y15-64,y15-24",
+            "level": "mod,mods,mild,none-min,sev,mod-mods-sev",
+            "deg-urb": "deg3,deg1,total,deg2",
+            "unit": "pc",
+            "description": "Severity of current depressive symptoms by sex, age and degree of urbanisation"
+        },
+        "svdp-citiz": {
+            "sex": "f,m,t",
+            "age": "y25-34,total,y45-54,y55-64,y65-74,y25-64,y35-44,y18-64,y18-24,y18-44,y15-29,y-ge65,y-ge18,y45-64,y-ge75,y15-64,y15-24",
+            "level": "mod,mods,mild,none-min,sev,mod-mods-sev",
+            "citiz": "neu28-for,neu27-2020-for,eu28-for,nat,for,eu27-2020-for",
+            "unit": "pc",
+            "description": "Severity of current depressive symptoms by sex, age and country of citizenhip"
+        }
+    },
+    "e_health_selfrep_bod": {
+        "svbp-edu": {
+            "sex": "f,m,t",
+            "age": "y25-34,total,y45-54,y15-44,y55-64,y65-74,y25-64,y35-44,y15-29,y-ge65,y-ge75,y45-64,y15-64,y15-24",
+            "level": "mod,vmild,s-vs,none,mild,m-vm",
+            "educ": "ed5-8,ed3-4,ed0-2,total",
+            "unit": "pc",
+            "description": "Severity of bodily pain by sex, age and educational attainment level"
+        },
+        "svbp-citiz": {
+            "sex": "f,m,t",
+            "age": "y25-34,total,y45-54,y15-44,y55-64,y65-74,y25-64,y35-44,y15-29,y-ge65,y-ge75,y45-64,y15-64,y15-24",
+            "level": "mod,vmild,s-vs,none,mild,m-vm",
+            "citiz": "neu28-for,neu27-2020-for,eu28-for,nat,for,eu27-2020-for",
+            "unit": "pc",
+            "description": "Severity of bodily pain by sex, age and country of citizenship"
+        },
+        "svbp-lim": {
+            "sex": "f,m,t",
+            "age": "y25-34,total,y45-54,y15-44,y55-64,y65-74,y25-64,y35-44,y15-29,y-ge65,y-ge75,y45-64,y15-64,y15-24",
+            "level": "mod,vmild,s-vs,none,mild,m-vm",
+            "lev-lim": "mod,sm-sev,none,sev",
+            "unit": "pc",
+            "description": "Severity of bodily pain by level of disability (activity limitation), sex and age"
+        }
+    },
+    "e_workinpoor": {
+        "wip-sa": {
+            "age": "f,m,t",
+            "unit": "total,y-ge16,y-ge18,y-ge65,y-ge75,y-lt16,y16-24,y16-64,y18-24,y18-64,y25-49,y50-64,y65-74",
+            "description": "Persons at risk of poverty or social exclusion by age and sex"
+        },
+        "wip-wstat": {
+            "age": "f,m,t",
+            "wstat": "y-ge18,y-ge65,y-ge75,y18-24,y18-64,y25-49,y50-64,y65-74",
+            "unit": "emp,nsal,pop,ret,sal,une",
+            "description": "Persons at risk of poverty or social exclusion by most frequent activity status (population aged 18 and over)"
+        },
+        "wip-inc": {
+            "hhcomp": "qu1,qu2,qu3,qu4,qu5,total",
+            "unit": "a-ge2-dch,a-ge2-ndch,a-ge3,a-ge3-dch,a1,a1-dch,a1-ge65,a1-lt65,a2,a2-2lt65,a2-dch-ge3,a2-dch1,a2-dch2,a2-ge1-ge65,dch,f1,m1,ndch,total",
+            "description": "Persons at risk of poverty or social exclusion by income quantile and household composition"
+        },
+        "wip-educ": {
+            "age": "f,m,t",
+            "educ": "y-ge18,y-ge65,y-ge75,y18-24,y18-64,y25-49,y50-64,y65-74",
+            "unit": "ed0-2,ed3-4,ed5-8,total",
+            "description": "Persons at risk of poverty or social exclusion by educational attainment level (population aged 18 and over)"
+        },
+        "wip-citiz": {
+            "age": "f,m,t",
+            "citiz": "y-ge18,y-ge65,y16-29,y25-54,y55-64",
+            "unit": "for,nat",
+            "description": ""
+        },
+        "wip-brth": {
+            "age": "f,m,t",
+            "brth": "y-ge18,y-ge65,y16-29,y25-54,y55-64",
+            "unit": "for,nat",
+            "description": "Persons at risk of poverty or social exclusion by group of country of birth (population aged 18 and over)"
+        },
+        "wip-tenr": {
+            "unit": "own-l,own-nl,rent-fr,rent-mkt,total",
+            "description": "Persons at risk of poverty or social exclusion by tenure status"
+        },
+        "wip-urb": {
+            "unit": "deg1,deg2,deg3",
+            "description": "Persons at risk of poverty or social exclusion by degree of urbanisation"
+        },
+        "chp-prnt": {
+            "age": "ed0-2,ed3-4,ed5-8",
+            "unit": "y-lt18,y-lt6,y12-17,y6-11",
+            "description": "Children at risk of poverty or social exclusion by educational attainment level of their parents (population aged 0 to 17 years) "
+        }
+    },
+    "e_workinpoor_spec": {
+        "wip-insct": {
+            "age": "t,m,f",
+            "yn_rskpov": "y-ge65,y50-64,y18-29,y25-54,y-lt18,total,y18-64,y-ge18",
+            "workint": "yes-arp,no-arp",
+            "lev_depr": "wi02-1-nap,wi0-02",
+            "unit": "sev,nsev",
+            "description": "Persons by risk of poverty, material deprivation, work intensity of the household, age and sex of the person - intersections of EU 2030 poverty target indicators"
+        }
+    },
+    "e_productivity": {
+        "d1-sal-hw": {
+            "sector": "g,e,d,r,c,h,n,s,m,i,a,b-e,f",
+            "unit": "eur",
+            "description": "Compensation of employees per hour worked by industry (NACE Rev. 2)"
+        },
+        "hw-emp": {
+            "sector": "g,e,d,r,c,h,n,s,m,i,a,b-e,f",
+            "unit": "i15,hw",
+            "description": "Hours worked per employed person by industry (NACE Rev. 2)"
+        },
+        "rlpr-hw": {
+            "sector": "g,e,d,r,c,h,n,s,m,i,a,b-e,f",
+            "unit": "i15",
+            "description": "Real labour productivity per hour worked by industry (NACE Rev. 2)"
+        },
+        "rlpr-per": {
+            "sector": "g,e,d,r,c,h,n,s,m,i,a,b-e,f",
+            "unit": "i15",
+            "description": "Real labour productivity per person by industry (NACE Rev. 2)"
+        },
+        "ncs-emp": {
+            "sector": "g,e,d,r,c,h,n,s,m,i,a,f,b",
+            "asset": "n11n",
+            "unit": "i15",
+            "description": "Net assets per employed person by industry (NACE Rev. 2)"
+        },
+        "ncs-gva": {
+            "sector": "g,e,d,r,c,h,n,s,m,i,a,f,b",
+            "asset": "n11n",
+            "unit": "i15",
+            "description": "Net assets to gross value added by industry (NACE Rev. 2)"
+        },
+        "ncs-hw": {
+            "sector": "g,e,d,r,c,h,n,s,m,i,a,f,b",
+            "asset": "n11n",
+            "unit": "i15",
+            "description": "Net assets per hour worked by industry (NACE Rev. 2)"
         }
     }
 }

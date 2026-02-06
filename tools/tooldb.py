@@ -140,7 +140,7 @@ def parse_time_column(df, time_col='TIME_PERIOD', freq_col='FREQ'):
 
 def update_db(db_name, available_geos, available_periods, db_source):
     columns = ["id","db_name", "available_geos", "available_periods", "db_source"]
-    file_path = "dbs/dbsData.csv"
+    file_path = "initiators/dbsData.csv"
     if os.path.exists(file_path):
         try:
             df = pd.read_csv(file_path)

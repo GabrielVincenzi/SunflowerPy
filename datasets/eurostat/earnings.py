@@ -2,7 +2,7 @@ import pandas as pd
 from tools.toolbi import default_connection, create_table_sql
 from tools.tooldb import clean_stat, update_json
 from functools import reduce
-import tools.tooleurostat as et
+from tools.tooleurostat import get_eurostat_dataset
 import config
 
 keys = config.KEYS
@@ -29,7 +29,7 @@ for year in year_specs:
     else:
         dataset_code = f'earn_ses{year % 100:02d}_13'
 
-    df_raw = et.get_eurostat_dataset(
+    df_raw = get_eurostat_dataset(
         dataset_code=dataset_code,
         filters=filters+countries
     )
@@ -94,3 +94,53 @@ update_json(earnings_df, db_name, pattern, descriptions)
 # ------ Connection -------- #
 create_table_sql(df=earnings_df, db_name=db_name)
 default_connection(earnings_df, db_name)
+
+
+# Earnings Annual, Monthly and Hourly by
+# age, sex, activity, worktime and contract
+# Define datasets with dataset_code and filters
+
+database_infos = {
+    "e_earnings_a_meur": ("earn_ses_annual", f"A..TOTAL+OC7-9+OC1-5+OC6-8+OC0.TOTAL+PT+FT+TOT_FTE..T+M+F.MEAN_E_EUR+MED_E_EUR.{countries}", "earn-a"),
+    "e_earnings_a_mpps": ("earn_ses_annual", f"A..TOTAL+OC7-9+OC1-5+OC6-8+OC0.TOTAL+PT+FT+TOT_FTE..T+M+F.MEAN_E_PPS+MED_E_PPS.{countries}", "earn-a"),
+    "e_earnings_a_deur": ("earn_ses_annual", f"A..TOTAL+OC7-9+OC1-5+OC6-8+OC0.TOTAL+PT+FT+TOT_FTE..T+M+F.D1_E_EUR+D9_E_EUR.{countries}", "earn-a"),
+    "e_earnings_a_dpps": ("earn_ses_annual", f"A..TOTAL+OC7-9+OC1-5+OC6-8+OC0.TOTAL+PT+FT+TOT_FTE..T+M+F.D1_E_PPS+D9_E_PPS.{countries}", "earn-a"),
+
+    "e_earnings_m_meur": ("earn_ses_monthly", f"A..TOTAL+OC7-9+OC1-5+OC6-8+OC0.TOTAL+PT+FT+TOT_FTE..T+M+F.MEAN_E_EUR+MED_E_EUR.{countries}", "earn-m"),
+    "e_earnings_m_mpps": ("earn_ses_monthly", f"A..TOTAL+OC7-9+OC1-5+OC6-8+OC0.TOTAL+PT+FT+TOT_FTE..T+M+F.MEAN_E_PPS+MED_E_PPS.{countries}", "earn-m"),
+    "e_earnings_m_deur": ("earn_ses_monthly", f"A..TOTAL+OC7-9+OC1-5+OC6-8+OC0.TOTAL+PT+FT+TOT_FTE..T+M+F.D1_E_EUR+D9_E_EUR.{countries}", "earn-m"),
+    "e_earnings_m_dpps": ("earn_ses_monthly", f"A..TOTAL+OC7-9+OC1-5+OC6-8+OC0.TOTAL+PT+FT+TOT_FTE..T+M+F.D1_E_PPS+D9_E_PPS.{countries}", "earn-m"),
+
+    "e_earnings_h_meur": ("earn_ses_hourly", f"A..TOTAL+OC7-9+OC1-5+OC6-8+OC0.TOTAL+PT+FT..T+M+F.MEAN_E_EUR+MED_E_EUR.{countries}", "earn-h"),
+    "e_earnings_h_mpps": ("earn_ses_hourly", f"A..TOTAL+OC7-9+OC1-5+OC6-8+OC0.TOTAL+PT+FT..T+M+F.MEAN_E_PPS+MED_E_PPS.{countries}", "earn-h"),
+    "e_earnings_h_deur": ("earn_ses_hourly", f"A..TOTAL+OC7-9+OC1-5+OC6-8+OC0.TOTAL+PT+FT..T+M+F.D1_E_EUR+D9_E_EUR.{countries}", "earn-h"),
+    "e_earnings_h_dpps": ("earn_ses_hourly", f"A..TOTAL+OC7-9+OC1-5+OC6-8+OC0.TOTAL+PT+FT..T+M+F.D1_E_PPS+D9_E_PPS.{countries}", "earn-h"),
+}
+
+cols_to_pivot = ["nace_r2", "isco08", "worktime", "age", "sex", "indic_se"]
+pattern = ["name", "sector", "isco08", "worktime", "age", "sex", "unit"]
+descriptions = {
+    "earn-a": "Structure of earnings survey: annual earnings by sex, age, worktime, economic activity and worker type",
+    "earn-m": "Structure of earnings survey: monthly earnings by sex, age, worktime, economic activity and worker type",
+    "earn-h": "Structure of earnings survey: hourly earnings by sex, age, worktime, economic activity and worker type"
+}
+
+# Loop through datasets
+dbs_list = [db for db in database_infos.keys()]
+for i, db in enumerate(dbs_list):
+    db_code, filters, prefix = database_infos.get(db)
+    df = get_eurostat_dataset(dataset_code=db_code, filters=filters)
+
+    for col in cols_to_pivot:
+        df[col] = df[col].str.replace("_", "-", regex=False)
+    
+    # Clean and pivot
+    df_clean = clean_stat(df, keys=keys, columns_to_pivot=cols_to_pivot, prefix=prefix)
+    df_clean = df_clean.dropna(axis=1, thresh=len(df_clean) * 0.25)
+    
+    # Update JSON metadata
+    update_json(df_clean, db, pattern, descriptions)
+    
+    # Create SQL table and upload
+    create_table_sql(df=df_clean, db_name=db)
+    default_connection(df_clean, db)
