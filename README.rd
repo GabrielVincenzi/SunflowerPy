@@ -1,19 +1,20 @@
-# Databases are already in the Charts?
+# Databases are already in the Charts? ✅
+# Database variable description in the dictionaries? 📒
 Eurostat:
-crime
-productivity
-earnings
-genderViolenceSpecific
-healthSelfPerc
-migrations
-demographic ✅
-employment ✅ # misses part and full time
-genderViolence ✅
-government ✅
-income ✅
-macroeconomic ✅
-pollutionIndustry ✅
-schooling ✅
+crime 📒
+productivity 📒
+earnings 📒
+genderViolenceSpecific 📒
+healthSelfPerc 📒
+migrations 📒
+demographic 📒 ✅
+employment 📒 ✅ # misses part and full time
+genderViolence 📒 ✅
+government 📒 ✅
+income 📒 ✅
+macroeconomic 📒 ✅
+pollutionIndustry 📒 ✅
+schooling 📒 ✅
 
 OECD:
 environment
@@ -25,13 +26,13 @@ trustSatisf
 wellbeing
 
 World Bank
-environment
+environment 📒
 
 Static:
 energyEmber
 energyOwid
 healthSelf
 ItalyUnobservedEcon
-literacy ✅
-press ✅
+literacy 📒 ✅
+press 📒 ✅
 ssp ✅

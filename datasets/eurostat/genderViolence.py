@@ -251,9 +251,9 @@ descriptions["gbv_shw_rp"] = {
 
 descriptions["gbv_shw_perp"] = {
     'v-sp-perp-cw-m': 'Women who have experienced sexual harassment by Co-worker - male',
-    'v-sp-perp-boss-m': 'Women who have experienced violsexual harassment at workence by Boss - male',
-    'v-sp-perp-oth-w-m': 'Women who have experienced violsexual harassment at workence by Other work-related - male',
-    'v-sp-perp-perp-m': 'Women who have experienced violsexual harassment at workence by Perpetrators - male',
+    'v-sp-perp-boss-m': 'Women who have experienced sexual harassment at work by Boss - male',
+    'v-sp-perp-oth-w-m': 'Women who have experienced sexual harassment at work by Other work-related - male',
+    'v-sp-perp-perp-m': 'Women who have experienced sexual harassment at work by Perpetrators - male',
 }
 
 descriptions["gbv_shw_frq"] = {
@@ -284,13 +284,13 @@ descriptions["gbv_st_rp"] = {
 }
 
 descriptions["gbv_st_perp"] = {
-    'v-sp-perp-perp-f': 'Women who have experienced stalking by Perpetrators - female',
-    'v-sp-perp-perp': 'Women who have experienced stalking by Perpetrators - male or female',
-    'v-sp-perp-perp-m': 'Women who have experienced stalking by Perpetrators - male',
-    'v-sp-perp-iptn': 'Women who have experienced stalking by Intimate partner - male or female',
-    'v-sp-perp-nptn': 'Women who have experienced stalking by Non-partner - male or female',
-    'v-sp-perp-nptn-m': 'Women who have experienced stalking by Non-partner - male',
-    'v-sp-perp-nptn-f': 'Women who have experienced stalking by Non-partner - female',
+    'v-sp-st-perp-f': 'Women who have experienced stalking by Perpetrators - female',
+    'v-sp-st-perp': 'Women who have experienced stalking by Perpetrators - male or female',
+    'v-sp-st-perp-m': 'Women who have experienced stalking by Perpetrators - male',
+    'v-sp-st-iptn': 'Women who have experienced stalking by Intimate partner - male or female',
+    'v-sp-st-nptn': 'Women who have experienced stalking by Non-partner - male or female',
+    'v-sp-st-nptn-m': 'Women who have experienced stalking by Non-partner - male',
+    'v-sp-st-nptn-f': 'Women who have experienced stalking by Non-partner - female',
 }
 
 descriptions["gbv_st_cnq"] = {
